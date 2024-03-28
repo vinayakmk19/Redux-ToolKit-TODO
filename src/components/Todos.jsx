@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeTodo, updateTodo } from "../features/todo/todoSlice";
+import { removeTodo, updateTodo, editTodo, toggleComplete } from "../features/todo/todoSlice";
 
 function Todos() {
   const todos = useSelector((state) => state.todos);
@@ -10,15 +10,18 @@ function Todos() {
     <>
       <div>Todos</div>
       <ul className="list-none">
-        {todos.map((todo) => (
+        {todos.map((todo) => ( 
+          
           <li
             className="mt-4 flex justify-between items-center bg-zinc-800 px-4 py-2 rounded"
             key={todo.id}
           >
-            <div className="text-white">{todo.text}</div>
+            <input type="checkbox" onClick={()=> dispatch(toggleComplete(todo))}  value={todo.isCompleted}  />
+            { todo.isCompleted  ? <div className='text-red-700 line-through'> {todo.text} </div> : <div className='text-white'> {todo.text} </div>}
+            {/* <div className="text-white">{todo.text}</div> */}
             <button
-              onClick={() => dispatch(updateTodo({id:todo.id, text:todo.text}))}
-              className="text-white bg-green-500 border-0 py-1 px-4 focus:outline-none hover:bg-green-600 rounded text-md"
+              onClick={() => dispatch(editTodo({id:todo.id, text:todo.text}))}
+              className= {todo.isCompleted ? "disabled":"text-white bg-green-500 border-0 py-1 px-4 focus:outline-none hover:bg-green-600 rounded text-md"}
             >
               Edit
             </button>
